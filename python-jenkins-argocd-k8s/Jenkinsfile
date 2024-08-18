@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-               git branch: 'main', credentialsId: 'a5e96ed7-3eac-47e3-aaa0-8b2a8dc0dc36', url: 'https://github.com/madhanshiva/sample'                
+               git branch: 'main', credentialsId: 'a5e96ed7-3eac-47e3-aaa0-8b2a8dc0dc36', url: 'https://github.com/madhanshiva/sample'
             }
         }
 
@@ -18,8 +18,9 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'docker_id', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                         sh '''
                         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                        echo 'Build Docker Image'
-                        docker build -t mvmadhan/cicd-e2e:${BUILD_NUMBER} .
+                        echo 'Build Docker Image with Buildx'
+                        docker buildx create --use
+                        docker buildx build -t mvmadhan/cicd-e2e:${BUILD_NUMBER} -f python-jenkins-argocd-k8s/Dockerfile .
                         '''
                     }
                 }
@@ -33,7 +34,7 @@ pipeline {
                         sh '''
                         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
                         echo 'Push to Repo'
-                        docker push mvmadhan/cicd-e2e:${BUILD_NUMBER}
+                        docker buildx build -t mvmadhan/cicd-e2e:${BUILD_NUMBER} --push -f python-jenkins-argocd-k8s/Dockerfile .
                         '''
                     }
                 }
