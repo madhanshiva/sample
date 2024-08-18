@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', credentialsId: 'shiva', url: 'https://github.com/madhanshiva/sample'
+               git branch: 'main', credentialsId: 'a5e96ed7-3eac-47e3-aaa0-8b2a8dc0dc36', url: 'https://github.com/madhanshiva/sample'                
             }
         }
 
@@ -39,10 +39,10 @@ pipeline {
                 }
             }
         }
-        
+'''        
         stage('Checkout K8S manifest SCM') {
             steps {
-                git branch: 'main', credentialsId: 'shiva', url: 'https://github.com/madhanshiva/cicd-demo-manifests-repo.git'
+                git branch: 'main', credentialsId: 'a5e96ed7-3eac-47e3-aaa0-8b2a8dc0dc36', url: 'https://github.com/madhanshiva/sample'
             }
         }
         
@@ -51,7 +51,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github-push-credentials', passwordVariable: 'GIT_TOKEN', usernameVariable: 'GIT_USERNAME')]) {
                         sh '''
-                        cat deploy.yaml
+   '''                     cat deploy.yaml
                         sed -i "s/32/${BUILD_NUMBER}/g" deploy.yaml
                         cat deploy.yaml
 
@@ -67,10 +67,10 @@ pipeline {
                         git commit -m 'Updated the deploy yaml | Jenkins Pipeline' || echo "No changes to commit"
                         git remote set-url origin https://$GIT_USERNAME:$GIT_TOKEN@github.com/madhanshiva/cicd-demo-manifests-repo.git
                         git push origin main
-                        '''
+      '''                  '''
                     }
                 }
             }
         }
     }
-}
+}'''
