@@ -39,38 +39,5 @@ pipeline {
                 }
             }
         }
-'''        
-        stage('Checkout K8S manifest SCM') {
-            steps {
-                git branch: 'main', credentialsId: 'a5e96ed7-3eac-47e3-aaa0-8b2a8dc0dc36', url: 'https://github.com/madhanshiva/sample'
-            }
-        }
-        
-        stage('Update K8S manifest & push to Repo') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'github-push-credentials', passwordVariable: 'GIT_TOKEN', usernameVariable: 'GIT_USERNAME')]) {
-                        sh '''
-   '''                     cat deploy.yaml
-                        sed -i "s/32/${BUILD_NUMBER}/g" deploy.yaml
-                        cat deploy.yaml
-
-                        # Configure Git with correct credentials
-                        git config user.name "Your Name"
-                        git config user.email "your.email@example.com"
-
-                        # Pull the latest changes to avoid conflicts
-                        git pull origin main
-
-                        # Add, commit, and push changes
-                        git add deploy.yaml
-                        git commit -m 'Updated the deploy yaml | Jenkins Pipeline' || echo "No changes to commit"
-                        git remote set-url origin https://$GIT_USERNAME:$GIT_TOKEN@github.com/madhanshiva/cicd-demo-manifests-repo.git
-                        git push origin main
-      '''                  '''
-                    }
-                }
-            }
-        }
     }
-}'''
+}
