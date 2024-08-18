@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: todo-app
+spec:
+  containers:
+  - name: todo-app
+    image: mvmadhan/cicd-e2e:v1
+    ports:
+    - containerPort: 8000
